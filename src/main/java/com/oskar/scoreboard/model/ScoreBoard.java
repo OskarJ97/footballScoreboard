@@ -1,10 +1,12 @@
 package com.oskar.scoreboard.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ScoreBoard {
 
+    public static final Comparator<Match> MATCH_RESULT_COMPARATOR = Comparator.comparingInt(Match::getTotalScore).reversed().thenComparing(Match::getSequence, Comparator.reverseOrder());
     private final List<Match> matches = new ArrayList<>();
     private long sequence = 0;
 
@@ -26,7 +28,7 @@ public class ScoreBoard {
     }
 
     List<Match> getSummary() {
-        return matches;
+        return matches.stream().sorted(MATCH_RESULT_COMPARATOR).toList();
     }
 
     public ScoreBoard() {
