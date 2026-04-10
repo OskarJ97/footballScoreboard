@@ -16,6 +16,15 @@ public class ScoreBoard {
         matches.removeIf(match -> homeTeam.equals(match.getHomeTeam()) && awayTeam.equals(match.getAwayTeam()));
     }
 
+    void updateScore(String homeTeam, String awayTeam, int homeTeamScore, int awayTeamScore) {
+        Match match = matches.stream().filter(
+                m -> homeTeam.equals(m.getHomeTeam()) && awayTeam.equals(m.getAwayTeam()))
+                .findFirst().orElseThrow(
+                        () -> new IllegalArgumentException("Match not found for teams: " + homeTeam + " vs " + awayTeam));
+
+        match.updateScore(homeTeamScore, awayTeamScore);
+    }
+
     List<Match> getSummary() {
         return matches;
     }
