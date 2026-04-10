@@ -13,12 +13,11 @@ public class ScoreBoard {
     }
 
     void finishMatch(String homeTeam, String awayTeam) {
-        // Implementation to finish a match
+        matches.removeIf(match -> homeTeam.equals(match.getHomeTeam()) && awayTeam.equals(match.getAwayTeam()));
     }
 
     List<Match> getSummary() {
-        // Implementation to return match summary
-        return new ArrayList<>();
+        return matches;
     }
 
     public ScoreBoard() {
