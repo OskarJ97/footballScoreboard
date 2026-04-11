@@ -27,7 +27,8 @@ public class ScoreBoard {
     public void finishMatch(String homeTeam, String awayTeam) {
         Objects.requireNonNull(homeTeam);
         Objects.requireNonNull(awayTeam);
-        matches.removeIf(match -> homeTeam.equals(match.getHomeTeam()) && awayTeam.equals(match.getAwayTeam()));
+        Match match = findMatch(homeTeam, awayTeam);
+        matches.remove(match);
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeTeamScore, int awayTeamScore) {
@@ -36,10 +37,7 @@ public class ScoreBoard {
         if (homeTeamScore < 0 || awayTeamScore < 0) {
             throw new IllegalArgumentException("Score cannot be negative: " + homeTeamScore + ":" + awayTeamScore);
         }
-        Match match = matches.stream().filter(
-                        m -> homeTeam.equals(m.getHomeTeam()) && awayTeam.equals(m.getAwayTeam()))
-                .findFirst().orElseThrow(
-                        () -> new IllegalArgumentException("Match not found for teams: " + homeTeam + " vs " + awayTeam));
+        Match match = findMatch(homeTeam, awayTeam);
 
         match.updateScore(homeTeamScore, awayTeamScore);
     }
@@ -55,5 +53,12 @@ public class ScoreBoard {
         return matches.stream().anyMatch(match ->
                 homeTeam.equals(match.getHomeTeam()) || homeTeam.equals(match.getAwayTeam()) ||
                         awayTeam.equals(match.getAwayTeam()) || awayTeam.equals(match.getHomeTeam()));
+    }
+
+    private Match findMatch(String homeTeam, String awayTeam) {
+        return matches.stream().filter(
+                        m -> homeTeam.equals(m.getHomeTeam()) && awayTeam.equals(m.getAwayTeam()))
+                .findFirst().orElseThrow(
+                        () -> new IllegalArgumentException("Match not found for teams: " + homeTeam + " vs " + awayTeam));
     }
 }

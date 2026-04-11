@@ -62,23 +62,22 @@ class ScoreBoardTest {
     }
 
     @Test
-    void shouldNotFinishMatchByWrongTeamNames() {
-        //given
-        ScoreBoard scoreBoard = new ScoreBoard();
-        scoreBoard.startMatch("Team A", "Team B");
-        //when
-        scoreBoard.finishMatch("Team A", "Team C");
-        //then
-        assertEquals(1, scoreBoard.getSummary().size());
-    }
-
-    @Test
     void shouldNotFinishMatchByNullTeam() {
         //given
         ScoreBoard scoreBoard = new ScoreBoard();
         //when+then
         assertThrows(NullPointerException.class, () ->
                 scoreBoard.finishMatch(null, null));
+    }
+
+    @Test
+    void shouldThrowErrorWhenFinishMatchTeamsNotFound() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        //when+then
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                scoreBoard.finishMatch("Team A", "Team B"));
+        assertTrue(ex.getMessage().contains("Match not found"));
     }
 
     @Test
