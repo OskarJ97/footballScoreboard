@@ -4,8 +4,8 @@ public class Match {
 
     private final String homeTeam;
     private final String awayTeam;
-    int homeTeamScore;
-    int awayTeamScore;
+    private int homeTeamScore;
+    private int awayTeamScore;
     private final long sequence;
 
     public Match(String homeTeam, String awayTeam, long sequence) {

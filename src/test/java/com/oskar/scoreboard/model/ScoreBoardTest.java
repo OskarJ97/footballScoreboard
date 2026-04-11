@@ -61,7 +61,8 @@ class ScoreBoardTest {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Team A", "Team B");
         //when + then
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> scoreBoard.updateScore("Team A", "Team C", 1, 0));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                scoreBoard.updateScore("Team A", "Team C", 1, 0));
         assertTrue(ex.getMessage().contains("Match not found"));
     }
 
