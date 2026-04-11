@@ -21,6 +21,36 @@ class ScoreBoardTest {
     }
 
     @Test
+    void shouldNotStartMatchWhenTeamIsAlreadyPlaying() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        //when+then
+        scoreBoard.startMatch("Team A", "Team B");
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                scoreBoard.startMatch("Team B", "Team C"));
+        assertTrue(ex.getMessage().contains("Match already started"));
+    }
+
+    @Test
+    void shouldNotStartMatchWithTheSameTeam() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        //when+then
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                scoreBoard.startMatch("Team A", "Team A"));
+        assertTrue(ex.getMessage().contains("Match should be played between different teams"));
+    }
+
+    @Test
+    void shouldNotStartMatchWithNullTeam() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        //when+then
+        assertThrows(NullPointerException.class, () ->
+                scoreBoard.startMatch("Team A", null));
+    }
+
+    @Test
     void shouldFinishMatchByRightTeamNames() {
         //given
         ScoreBoard scoreBoard = new ScoreBoard();
@@ -40,6 +70,15 @@ class ScoreBoardTest {
         scoreBoard.finishMatch("Team A", "Team C");
         //then
         assertEquals(1, scoreBoard.getSummary().size());
+    }
+
+    @Test
+    void shouldNotFinishMatchByNullTeam() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        //when+then
+        assertThrows(NullPointerException.class, () ->
+                scoreBoard.finishMatch(null, null));
     }
 
     @Test
@@ -64,6 +103,27 @@ class ScoreBoardTest {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
                 scoreBoard.updateScore("Team A", "Team C", 1, 0));
         assertTrue(ex.getMessage().contains("Match not found"));
+    }
+
+    @Test
+    void shouldThrowErrorUponUpdateScoreWithNullTeam() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        scoreBoard.startMatch("Team A", "Team B");
+        //when + then
+        assertThrows(NullPointerException.class, () ->
+                scoreBoard.updateScore("Team A", null, 1, 0));
+    }
+
+    @Test
+    void shouldThrowErrorUponUpdateScoreWithNegativeScore() {
+        //given
+        ScoreBoard scoreBoard = new ScoreBoard();
+        scoreBoard.startMatch("Team A", "Team B");
+        //when + then
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                scoreBoard.updateScore("Team A", "Team B", -1, 0));
+        assertTrue(ex.getMessage().contains("Score cannot be negative"));
     }
 
     @Test
